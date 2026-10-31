@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vanities App Mock-up</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap">
+<style>
+  /* Layout: a quiet presentation stage. A credit band, one control rail, then
+     the live devices side by side at true relative size on a blush floor. */
+  :root {
+    --bg: #F4F1EF;
+    --floor: #F6E1DF;
+    --surface: #FFFFFF;
+    --ink: #232021;
+    --muted: #5F5957;
+    --line: #E3DEDB;
+    --rose: #9E4F56;
+    --track: #ECE7E4;
+    --on: #232021;
+    --on-ink: #FFFFFF;
+    --metal: #1E1C1D;
+    --metal-edge: #4A4443;
+    --boot: #F6F5F4;
+    --boot-ink: #8A8380;
+    --display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    /* Light only, by request: the preview always opens in light mode. */
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 15px/1.5 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding-block: 16px 28px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Credit band */
+  .band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 32px;
+  }
+  .band > div { min-width: 0; }
+  .eyebrow {
+    margin: 0 0 4px;
+    font: 600 12px/1.3 var(--body);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--rose);
+  }
+  .eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .secret {
+    padding: 4px 9px;
+    border: 1.5px solid var(--rose);
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: .18em;
+  }
+  h1 {
+    margin: 0;
+    font: 500 clamp(26px, 3vw, 34px)/1.1 var(--display);
+    text-wrap: balance;
+  }
+  .lede { margin: 6px 0 0; color: var(--muted); max-width: 60ch; }
+  .credit {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .credit small {
+    font: 500 12px/1.2 var(--body);
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+  .geotech {
+    font: 700 15px/1 var(--body);
+    letter-spacing: .32em;
+    margin-right: -.32em;
+  }
+
+  /* Control rail */
+  .rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .group { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .group > span {
+    font: 600 12px/1 var(--body);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .seg {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--track);
+  }
+  .seg button, .btn, select {
+    font: 600 14px/1 var(--body);
+    color: var(--ink);
+    min-height: 36px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .seg button {
+    border: 0;
+    background: transparent;
+    padding: 0 14px;
+    transition: background .2s, color .2s;
+  }
+  .seg button[aria-pressed="true"] { background: var(--on); color: var(--on-ink); }
+  .seg button:disabled { opacity: .45; cursor: default; }
+  select {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23888' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;
+    padding: 0 38px 0 14px;
+    width: 260px;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  .btn {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 0 16px;
+  }
+  .btn:hover, select:hover { border-color: var(--muted); }
+  .rail .push { margin-left: auto; }
+  :focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+
+  .hint { margin: 0; color: var(--muted); font-size: 14px; }
+  .hint b { color: var(--ink); font-weight: 600; }
+
+  /* Stage */
+  .stage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 40px;
+    padding: 16px 12px 14px;
+    border-radius: 28px;
+    background: radial-gradient(120% 90% at 50% 100%, var(--floor), transparent 70%);
+    overflow: hidden;
+  }
+  .device { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .device.off {
+    position: absolute;
+    left: -200vw;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .fit { position: relative; }
+  .frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    background: var(--metal);
+    box-shadow:
+      0 0 0 1.5px var(--metal-edge),
+      0 30px 60px -20px rgba(35, 32, 33, .45),
+      0 12px 24px -12px rgba(35, 32, 33, .35);
+  }
+  .phone .frame { padding: 14px; border-radius: 68px; }
+  .phone .frame::before, .phone .frame::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--metal-edge);
+  }
+  .phone .frame::before { left: -4px; top: 180px; height: 64px; box-shadow: 0 84px 0 var(--metal-edge); }
+  .phone .frame::after { right: -4px; top: 220px; height: 100px; }
+  .tablet .frame { padding: 22px; border-radius: 46px; }
+  .screen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--boot);
+  }
+  .phone .screen { width: 390px; height: 844px; border-radius: 54px; }
+  .tablet .screen { width: 820px; height: 1180px; border-radius: 26px; }
+  .tablet.landscape .screen { width: 1180px; height: 820px; }
+  .screen iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: transparent;
+  }
+  .boot {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--boot-ink);
+  }
+  .boot strong { font: 500 34px/1 var(--display); color: var(--ink); letter-spacing: .02em; }
+  .boot span { font: 500 15px/1 var(--body); animation: breathe 1.6s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .35; } }
+
+  /* Device chrome drawn over the app: inverts against whatever is beneath. */
+  .status, .homebar {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+  .status {
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font: 600 17px/1 var(--body);
+    font-variant-numeric: tabular-nums;
+  }
+  .status .icons { display: flex; align-items: center; gap: 6px; }
+  .status svg { display: block; fill: currentColor; }
+  .phone .status { height: 54px; padding: 6px 30px 0 52px; }
+  .tablet .status { height: 24px; padding: 0 24px; font-size: 13px; }
+  .tablet .status .icons { gap: 6px; font-size: 13px; }
+  .island {
+    position: absolute;
+    z-index: 3;
+    top: 11px;
+    left: 50%;
+    width: 124px;
+    height: 36px;
+    margin-left: -62px;
+    border-radius: 20px;
+    background: #000;
+    pointer-events: none;
+  }
+  .homebar {
+    bottom: 8px;
+    left: 50%;
+    height: 5px;
+    border-radius: 3px;
+    background: #fff;
+  }
+  .phone .homebar { width: 134px; margin-left: -67px; }
+  .tablet .homebar { width: 200px; margin-left: -100px; bottom: 7px; }
+
+  /* GEOTECH watermark, centred on every screen, never in the way of a tap */
+  .wm {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: rgba(128, 116, 114, .34);
+    font-family: var(--body);
+    text-align: center;
+    user-select: none;
+  }
+  .wm > * { transform: rotate(-30deg); }
+  .wm { gap: 0; }
+  .wm-mark { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .tablet .wm-mark { transform: rotate(-35deg); }
+  .wm b { font-weight: 700; font-size: 46px; line-height: 1; letter-spacing: .22em; margin-right: -.22em; }
+  .wm span { font-weight: 600; font-size: 17px; line-height: 1; letter-spacing: .5em; margin-right: -.5em; }
+  .tablet .wm b { font-size: 76px; }
+  .tablet .wm span { font-size: 26px; }
+
+  figcaption {
+    font: 500 13px/1.2 var(--body);
+    color: var(--muted);
+    letter-spacing: .04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  footer p { margin: 0; max-width: 80ch; }
+
+  @media (max-width: 720px) {
+    .rail { gap: 10px 12px; }
+    .rail .push { margin-left: 0; width: 100%; }
+    .rail .push select { flex: 1; width: auto; min-width: 0; }
+    .size-group { display: none; }
+    .stage { gap: 20px; padding-top: 20px; }
+    .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .boot span { animation: none; }
+    .seg button { transition: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="band">
+    <div>
+      <p class="eyebrow"><span class="secret">Confidential</span> Interactive app mock-up · Davao City</p>
+      <h1>Vanities Session</h1>
+      <p class="lede">The real app, running in your browser on an iPhone and an iPad.</p>
+    </div>
+    <div class="credit" aria-label="Built by GEOTECH">
+      <small>Built by</small>
+      <span class="geotech">GEOTECH</span>
+    </div>
+  </header>
+
+  <nav class="rail" aria-label="Preview controls">
+    <div class="group">
+      <span id="lbl-show">Show</span>
+      <div class="seg" role="group" aria-labelledby="lbl-show">
+        <button type="button" id="show-phone" data-show="phone" aria-pressed="true">iPhone</button>
+        <button type="button" id="show-tablet" data-show="tablet" aria-pressed="false">iPad</button>
+        <button type="button" id="show-both" data-show="both" aria-pressed="false">iPhone + iPad</button>
+      </div>
+    </div>
+    <div class="group">
+      <span id="lbl-ipad">iPad</span>
+      <div class="seg" role="group" aria-labelledby="lbl-ipad">
+        <button type="button" id="ipad-portrait" data-orient="portrait" aria-pressed="true">Portrait</button>
+        <button type="button" id="ipad-landscape" data-orient="landscape" aria-pressed="false">Landscape</button>
+      </div>
+    </div>
+    <div class="group size-group">
+      <span id="lbl-size">Size</span>
+      <div class="seg" role="group" aria-labelledby="lbl-size">
+        <button type="button" id="size-fit" data-size="fit" aria-pressed="true">Fit</button>
+        <button type="button" id="size-full" data-size="full" aria-pressed="false">100%</button>
+      </div>
+    </div>
+    <div class="group push">
+      <select id="jump" aria-label="Go to a screen">
+        <option value="">Go to a screen…</option>
+        <optgroup label="Start">
+          <option value="/demo">Choose a view (client, nurse, rider, owner)</option>
+          <option value="/">Welcome</option>
+          <option value="/onboarding">Onboarding</option>
+          <option value="/setup">Set up</option>
+          <option value="/sign-in">Sign in</option>
+        </optgroup>
+        <optgroup label="Client app">
+          <option value="/home">Home</option>
+          <option value="/shop">Shop</option>
+          <option value="/book">Book a treatment</option>
+          <option value="/bookings">My bookings</option>
+          <option value="/account">Account</option>
+          <option value="/notifications">Notifications</option>
+          <option value="/treatments/premium-gluta-drip">Treatment · Premium Gluta Drip</option>
+          <option value="/appointments/VS-3010-0412">Appointment · Fri Oct 30, 2:00 PM</option>
+          <option value="/shop-clips">Shop clips</option>
+          <option value="/cart">Cart</option>
+          <option value="/orders/order-1042">Order #1042 tracking</option>
+          <option value="/packages">Packages</option>
+          <option value="/help">Help</option>
+        </optgroup>
+        <optgroup label="Team">
+          <option value="/nurse">Nurse · Today's visits</option>
+          <option value="/rider">Rider · New delivery</option>
+          <option value="/owner">Owner · Daily summary</option>
+        </optgroup>
+      </select>
+      <button type="button" class="btn" id="restart">Restart</button>
+    </div>
+  </nav>
+
+  <main class="stage" id="stage">
+    <figure class="device phone" id="dev-phone">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Vanities</strong><span>Opening the app…</span></div>
+            <iframe title="Vanities app on iPhone" allow="autoplay; fullscreen"></iframe>
+            <div class="status">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .6C5.2.6 2.7 1.7.8 3.5L2 4.7a8.5 8.5 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.9 6.9 0 0 0 8 4c-1.9 0-3.5.7-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.2l1.6-1.6c-.4-.4-1-.6-1.6-.6Z"/></svg>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="island"></div>
+            <div class="homebar"></div>
+            <div class="wm" aria-hidden="true"><div class="wm-mark"><b>GEOTECH</b><span>PROTOTYPE</span></div></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>iPhone · 390 × 844</figcaption>
+    </figure>
+
+    <figure class="device tablet" id="dev-tablet">
+      <div class="fit">
+        <div class="frame">
+          <div class="screen">
+            <div class="boot"><strong>Vanities</strong><span>Opening the app…</span></div>
+            <iframe title="Vanities app on iPad" allow="autoplay; fullscreen"></iframe>
+            <div class="status">
+              <span>9:41 AM&nbsp;&nbsp;Wed Oct 28</span>
+              <span class="icons">
+                <svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8 .6C5.2.6 2.7 1.7.8 3.5L2 4.7a8.5 8.5 0 0 1 6-2.4Zm0 3.4c1.4 0 2.6.5 3.6 1.4l1.2-1.2A6.9 6.9 0 0 0 8 4c-1.9 0-3.5.7-4.8 1.9l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.2l1.6-1.6c-.4-.4-1-.6-1.6-.6Z"/></svg>
+                <span>100%</span>
+                <svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2Z" opacity=".4"/></svg>
+              </span>
+            </div>
+            <div class="homebar"></div>
+            <div class="wm" aria-hidden="true"><div class="wm-mark"><b>GEOTECH</b><span>PROTOTYPE</span></div></div>
+          </div>
+        </div>
+      </div>
+      <figcaption id="tablet-cap">iPad · 820 × 1180</figcaption>
+    </figure>
+  </main>
+
+  <p class="hint"><b>Click</b> to tap, <b>drag</b> to swipe, <b>scroll</b> to move down a page. Each device keeps its own place, and "Go to a screen" moves both.</p>
+
+  <footer>
+    <p>Everything runs on sample data. No real bookings, orders, payments or messages are sent.</p>
+    <p><strong>Confidential.</strong> Mock-up © 2026 GEOTECH, prepared for Vanities Session only. Please don't share it further.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var APP = 'app/index.html';
+  var START = '/demo';
+  var DEVICES = {
+    phone: { el: document.getElementById('dev-phone'), w: 390, h: 844, bezel: 14, inset: '47,34' },
+    tablet: { el: document.getElementById('dev-tablet'), w: 820, h: 1180, bezel: 22, inset: '24,20' }
+  };
+  var narrow = window.matchMedia('(max-width: 720px)').matches;
+  var state = { show: 'phone', landscape: false, size: 'fit' };
+
+  function store(key, value) {
+    try { localStorage.setItem('vanities-preview-' + key, value); } catch (e) {}
+  }
+  function recall(key) {
+    try { return localStorage.getItem('vanities-preview-' + key); } catch (e) { return null; }
+  }
+  if (/^(both|phone|tablet)$/.test(recall('show') || '')) state.show = recall('show');
+  if (recall('landscape') === '1') state.landscape = true;
+  if (recall('size') === 'full') state.size = 'full';
+
+  function frameOf(kind) { return DEVICES[kind].el.querySelector('iframe'); }
+  function appUrl(kind, route, fresh) {
+    return APP + '?inset=' + DEVICES[kind].inset + (fresh ? '&r=' + Date.now() : '') + '#' + route;
+  }
+  function visible() {
+    return state.show === 'both' ? ['phone', 'tablet'] : [state.show];
+  }
+  // Each device boots the first time it is shown, so a phone viewer only
+  // downloads one copy of the app.
+  function boot(kind, route) {
+    var f = frameOf(kind);
+    if (f.getAttribute('src')) return false;
+    f.src = appUrl(kind, route || START);
+    return true;
+  }
+  function go(kind, route) {
+    if (boot(kind, route)) return;
+    var f = frameOf(kind);
+    try { f.contentWindow.location.hash = route; }
+    catch (e) { f.src = appUrl(kind, route); }
+  }
+
+  function outer(kind) {
+    var d = DEVICES[kind];
+    var w = d.w, h = d.h;
+    if (kind === 'tablet' && state.landscape) { w = d.h; h = d.w; }
+    return { w: w + 2 * d.bezel, h: h + 2 * d.bezel };
+  }
+
+  function layout() {
+    var stage = document.getElementById('stage');
+    var kinds = visible();
+    var gap = narrow ? 20 : 40;
+    var top = stage.getBoundingClientRect().top + window.scrollY;
+    // Room for the stage padding and the caption under each device.
+    var availH = Math.max(420, window.innerHeight - top - 64);
+    var availW = stage.clientWidth - 24 - gap * (kinds.length - 1);
+    var sizes = kinds.map(outer);
+    var scales = sizes.map(function (s) {
+      return state.size === 'full' && !narrow ? 1 : Math.min(1, availH / s.h);
+    });
+    var total = sizes.reduce(function (sum, s, i) { return sum + s.w * scales[i]; }, 0);
+    if (total > availW) {
+      var k = availW / total;
+      scales = scales.map(function (s) { return s * k; });
+    }
+    Object.keys(DEVICES).forEach(function (kind) {
+      DEVICES[kind].el.classList.toggle('off', kinds.indexOf(kind) < 0);
+    });
+    kinds.forEach(function (kind, i) {
+      var el = DEVICES[kind].el;
+      var s = sizes[i], sc = scales[i];
+      var fit = el.querySelector('.fit');
+      fit.style.width = Math.round(s.w * sc) + 'px';
+      fit.style.height = Math.round(s.h * sc) + 'px';
+      el.querySelector('.frame').style.transform = 'scale(' + sc + ')';
+    });
+  }
+
+  function render() {
+    document.querySelectorAll('[data-show]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.show === state.show));
+    });
+    document.querySelectorAll('[data-orient]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String((b.dataset.orient === 'landscape') === state.landscape));
+      b.disabled = state.show === 'phone';
+    });
+    document.querySelectorAll('[data-size]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.size === state.size));
+    });
+    DEVICES.tablet.el.classList.toggle('landscape', state.landscape);
+    document.getElementById('tablet-cap').textContent =
+      state.landscape ? 'iPad · 1180 × 820' : 'iPad · 820 × 1180';
+    visible().forEach(function (kind) { boot(kind); });
+    layout();
+  }
+
+  document.querySelectorAll('[data-show]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.show = b.dataset.show;
+      store('show', state.show);
+      render();
+    });
+  });
+  document.querySelectorAll('[data-orient]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.landscape = b.dataset.orient === 'landscape';
+      store('landscape', state.landscape ? '1' : '0');
+      render();
+    });
+  });
+  document.querySelectorAll('[data-size]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.size = b.dataset.size;
+      store('size', state.size);
+      render();
+    });
+  });
+  document.getElementById('jump').addEventListener('change', function (e) {
+    var route = e.target.value;
+    if (route) visible().forEach(function (kind) { go(kind, route); });
+    e.target.value = '';
+  });
+  document.getElementById('restart').addEventListener('click', function () {
+    visible().forEach(function (kind) { frameOf(kind).src = appUrl(kind, START, true); });
+  });
+  window.addEventListener('resize', layout);
+
+  render();
+})();
+</script>
