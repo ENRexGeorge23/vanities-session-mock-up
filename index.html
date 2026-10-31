@@ -378,7 +378,7 @@
       <select id="jump" aria-label="Go to a screen">
         <option value="">Go to a screen…</option>
         <optgroup label="Start">
-          <option value="/demo">Choose a view (client, nurse, rider, owner)</option>
+          <option value="/demo">Choose a view (client, nurse, rider, owner, clinic, support)</option>
           <option value="/">Welcome</option>
           <option value="/onboarding">Onboarding</option>
           <option value="/setup">Set up</option>
@@ -399,10 +399,31 @@
           <option value="/packages">Packages</option>
           <option value="/help">Help</option>
         </optgroup>
+        <optgroup label="Clinics and stores">
+          <option value="/clinics">Our clinics</option>
+          <option value="/clinics/lanang">Clinic page · Vanities Session</option>
+          <option value="/clinics/partner-ecoland">Clinic page · Lumière Skin Studio</option>
+          <option value="/shop/stores/partner-ecoland">Store · Lumière Skin Studio</option>
+        </optgroup>
+        <optgroup label="Oct 31 updates · client">
+          <option value="/sign-in/code">Sign in · enter code</option>
+          <option value="/orders/order-1042/failed">Failed delivery · 1st warning</option>
+          <option value="/account-paused">Account paused</option>
+          <option value="/pay/gcash">GCash payment</option>
+          <option value="/billing">Billing &amp; statements</option>
+          <option value="/messages">Messages</option>
+          <option value="/messages/support">Chat with support</option>
+          <option value="/nurses/nurse-joy">Nurse Joy · profile</option>
+        </optgroup>
         <optgroup label="Team">
           <option value="/nurse">Nurse · Today's visits</option>
+          <option value="/nurse/availability">Nurse · My availability</option>
+          <option value="/nurse/sos">Nurse · SOS</option>
           <option value="/rider">Rider · New delivery</option>
           <option value="/owner">Owner · Daily summary</option>
+          <option value="/clinic-staff/walkthrough">Clinic · Safety walkthrough</option>
+          <option value="/clinic-staff/ratings">Clinic · Ratings &amp; appeals</option>
+          <option value="/support">Support · Inbox</option>
         </optgroup>
       </select>
       <button type="button" class="btn" id="restart">Restart</button>
